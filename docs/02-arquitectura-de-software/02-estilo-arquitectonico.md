@@ -48,6 +48,3 @@ flowchart TB
 | **Monolito modular** | ✅ Sí | Un solo despliegue, simple para un equipo pequeño (RC07), con módulos que mantienen el orden (DA04). |
 | **Capas** | ✅ Sí | Separa responsabilidades dentro de cada módulo (ver Clean Architecture). |
 | Cliente-servidor | Implícito | El frontend es el cliente y la API es el servidor, como en toda aplicación web. |
-| Microservicios | ❌ No | Agrega red, varios despliegues y datos distribuidos sin necesidad en esta etapa. Gracias a los módulos, en el futuro se podría separar uno como servicio. |
-| Event-Driven | ❌ No | No hay procesos asíncronos que lo justifiquen; las operaciones son peticiones y respuestas directas. |
-| Serverless | ❌ No | La aplicación mantiene sesiones, auditoría y conexiones a la base de datos; un servidor tradicional es más simple. |
