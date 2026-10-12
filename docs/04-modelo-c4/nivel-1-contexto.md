@@ -86,7 +86,7 @@ flowchart TB
 |---|---|---|
 | 1 | SICNA **solo lee** la base de atenciones; nunca escribe en ella | Es un sistema de la red de salud (RC06) |
 | 2 | Las credenciales de RENIEC están solo en el servidor | No se exponen al navegador (RC05) |
-| 3 | Si un sistema externo falla, SICNA sigue funcionando | Registro manual y reintento de la carga (AC05) |
+| 3 | Si un sistema externo falla, SICNA sigue funcionando | Registro manual y reintento de la carga (AC02) |
 | 4 | Los padres solo ven información de sus propios hijos | Protección de datos de menores (Ley N.° 29733) |
 
 ### Pendientes por definir

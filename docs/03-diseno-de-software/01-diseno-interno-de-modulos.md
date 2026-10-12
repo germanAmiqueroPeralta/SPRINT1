@@ -399,4 +399,4 @@ sequenceDiagram
 | Los controles se **actualizan**, no se duplican | La carga es idempotente (restricción `child_controls_unique`) |
 | Cada actualización pasa por las mismas reglas RN-01 a RN-07 | Una atención externa no puede saltarse las reglas del negocio |
 | Las atenciones que no se pueden aplicar se registran con su motivo | El administrador general puede revisarlas y corregirlas |
-| Los cambios del importador quedan en la auditoría con el usuario técnico `importador` | Trazabilidad (AC02) |
+| Los cambios del importador quedan en la auditoría con el usuario técnico `importador` | Seguridad · auditoría (AC04) |
