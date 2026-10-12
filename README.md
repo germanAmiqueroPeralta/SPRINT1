@@ -26,6 +26,10 @@ Red de salud con micro redes y establecimientos (centros y puestos de salud) que
 
 Arquitectura de Software
 
+## Presentación
+
+📊 [Ver la presentación de SICNA (Google Slides)](https://docs.google.com/presentation/d/1UOQCRtjdSHtLmeNqZJf_IEtyc8NsgQQi/edit?usp=drive_link&ouid=117345692440675930542&rtpof=true&sd=true)
+
 ## Tecnologías
 
 | Parte | Tecnología |
