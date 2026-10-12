@@ -67,6 +67,7 @@ srs-back/src/modules/
 ## 3. Capas del módulo y regla de dependencia
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}}}%%
 flowchart LR
     subgraph presentation["CAPA DE PRESENTACIÓN · presentation"]
         R[child_control_route] --> H[create_handler]
@@ -93,6 +94,11 @@ flowchart LR
     REPO -. implementa .-> RP
     AD -. implementa .-> PP
     REPO --> MAP --> E
+
+    style presentation fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    style application fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style domain fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style infrastructure fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
 ```
 
 **Regla de dependencia:** el código solo importa **hacia el centro** (el dominio). El dominio no conoce FastAPI, asyncpg ni los otros módulos.

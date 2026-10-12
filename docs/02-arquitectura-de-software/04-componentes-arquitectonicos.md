@@ -5,6 +5,7 @@ Vista de componentes de SICNA según el **Modelo C4 · Nivel 3 (componentes)**, 
 ## Diagrama de componentes
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
 flowchart TB
     P1["<b>Administrador general</b><br/>[Persona]<br/>Gestiona usuarios, permisos,<br/>catálogo y auditoría"]
     P2["<b>Coordinador</b><br/>[Persona]<br/>Registra niños, controles<br/>y atiende reclamos"]
@@ -65,9 +66,9 @@ flowchart TB
     class WEB,DB,FS container
     class REST,ACC,TER,NIN,CAT,CON,REC,POR,AUD,INT component
     class RENIEC,BDEXT external
-    style API fill:#ffffff,stroke:#444,stroke-dasharray:8 5
-    style CPRES fill:#e3eefc,stroke:#3b6fd8
-    style MODS fill:#e9f6e6,stroke:#2e8b3d
+    style API fill:#f8fafc,stroke:#334155,stroke-width:2px,stroke-dasharray:8 5,color:#0f172a
+    style CPRES fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    style MODS fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
 ```
 
 ### Leyenda

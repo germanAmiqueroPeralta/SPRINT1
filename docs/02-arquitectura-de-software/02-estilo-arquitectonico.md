@@ -13,6 +13,7 @@ Se utiliza el estilo arquitectónico: **monolito modular + capas**.
 ## Diagrama del estilo
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
 flowchart TB
     A1["👤 Administrador general"]
     A2["👤 Coordinador"]
@@ -95,22 +96,22 @@ flowchart TB
     s8 -->|"SQL · solo lectura"| BDEXT
     IMP -->|ejecuta la carga| s8
 
-    classDef actor fill:#ffffff,stroke:#222,color:#111
-    classDef pres fill:#ffffff,stroke:#3b6fd8,color:#111
-    classDef serv fill:#d9f2d4,stroke:#2e8b3d,color:#111
-    classDef repo fill:#ffffff,stroke:#c9a227,color:#111
-    classDef ext fill:#e6e6e6,stroke:#555,color:#111
+    classDef actor fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+    classDef pres fill:#ffffff,stroke:#2563eb,color:#111827
+    classDef serv fill:#ffffff,stroke:#16a34a,color:#111827
+    classDef repo fill:#ffffff,stroke:#d97706,color:#111827
+    classDef ext fill:#e5e7eb,stroke:#4b5563,color:#111827
     class A1,A2,A3,WEB actor
     class MW,p1,p2,p3,p4,p5,p6,p7,p8,p9 pres
     class s1,s2,s3,s4,s5,s6,s7,s8,s9 serv
     class r1,r2,r3,r4,r5,r6,r7,r8,r9,DA repo
     class DB,FS,RENIEC,BDEXT,IMP ext
 
-    style MONO fill:#ffffff,stroke:#222,stroke-width:2px,stroke-dasharray:8 5
-    style L1 fill:#e3eefc,stroke:#3b6fd8
+    style MONO fill:#f8fafc,stroke:#334155,stroke-width:2px,stroke-dasharray:8 5,color:#0f172a
+    style L1 fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
     style P fill:none,stroke:none
-    style L2 fill:#e9f6e6,stroke:#2e8b3d
-    style L3 fill:#fdf3d8,stroke:#c9a227
+    style L2 fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style L3 fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
 ```
 
 ### Leyenda

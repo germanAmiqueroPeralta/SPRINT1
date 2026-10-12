@@ -14,7 +14,7 @@ Se utiliza el patrón arquitectónico **Clean Architecture** (Arquitectura Limpi
 ## Diagrama de Clean Architecture en SICNA
 
 ```mermaid
-%%{init: {"flowchart": {"wrappingWidth": 600}}}%%
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
 flowchart TB
     U(["👤 Usuario<br/>(navegador)"]) --> FE["«frontend»<br/><b>Aplicación web</b><br/>panel administrativo · portal familiar"]
 
@@ -88,21 +88,21 @@ flowchart TB
     INFRA -->|HTTPS · SQL| EXT
     INFRA -->|archivos| FS
 
-    classDef card fill:#ffffff,stroke:#444,color:#111
-    classDef ext fill:#e6e6e6,stroke:#444,color:#111
+    classDef card fill:#ffffff,stroke:#475569,color:#111827
+    classDef ext fill:#e5e7eb,stroke:#4b5563,color:#111827
     class p1,p2,p3,p4,a1,a2,a3,a4,d1,d2,d3,d4,c1,c2,c3,c4,c5,c6,i1,i2,i3,i4,i5,i6,CR card
     class U,FE,DB,EXT,FS ext
 
-    style SICNA fill:#ffffff,stroke:#222,stroke-dasharray:8 5
-    style PRES fill:#dbeafe,stroke:#3b6fd8
-    style UC fill:#e3f5e1,stroke:#2e8b3d
-    style DOM fill:#fdf1c7,stroke:#c9a227
-    style MOD fill:none,stroke:#c9a227,stroke-dasharray:3 3
-    style CON fill:none,stroke:#c9a227,stroke-dasharray:3 3
-    style INFRA fill:#ece3f7,stroke:#7b4bb7
+    style SICNA fill:#f8fafc,stroke:#334155,stroke-width:2px,stroke-dasharray:8 5,color:#0f172a
+    style PRES fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    style UC fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style DOM fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style MOD fill:#fffbeb,stroke:#d97706,stroke-dasharray:3 3,color:#78350f
+    style CON fill:#fffbeb,stroke:#d97706,stroke-dasharray:3 3,color:#78350f
+    style INFRA fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
 
-    linkStyle 23 stroke:#2e8b3d,stroke-width:2px
-    linkStyle 24 stroke:#7b4bb7,stroke-width:2px
+    linkStyle 23 stroke:#16a34a,stroke-width:2px
+    linkStyle 24 stroke:#7c3aed,stroke-width:2px
 ```
 
 ### Reglas de dependencia

@@ -3,6 +3,7 @@
 ## Diagrama de arquitectura
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
 flowchart TD
 
 %% =========================
@@ -100,14 +101,14 @@ RENIEC ~~~ BDEXT
 %% =========================
 %% ESTILOS
 %% =========================
-style ACTORES fill:#222,stroke:#fff,stroke-width:2px,color:#fff
-style PRESENTACION fill:#222,stroke:#fff,stroke-width:2px,color:#fff
-style NEGOCIO fill:#222,stroke:#fff,stroke-width:2px,color:#fff
-style PROCESOS fill:#222,stroke:#fff,stroke-width:2px,color:#fff
-style DATOS fill:#222,stroke:#fff,stroke-width:2px,color:#fff
-style EXTERNOS fill:#222,stroke:#fff,stroke-width:2px,color:#fff
+style ACTORES fill:#e0f2fe,stroke:#0369a1,stroke-width:2px,color:#0c4a6e
+style PRESENTACION fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+style NEGOCIO fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+style PROCESOS fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#831843
+style DATOS fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+style EXTERNOS fill:#e5e7eb,stroke:#4b5563,stroke-width:2px,color:#111827
 
-classDef box fill:#222,stroke:#fff,color:#fff
+classDef box fill:#ffffff,stroke:#475569,color:#111827
 class AG,CO,PA,Web,API,Acceso,Territorio,Ninos,Catalogo,Controles,Reclamos,Portal,Integraciones,Auditoria,Importador,BD,Archivos,RENIEC,BDEXT box
 ```
 
