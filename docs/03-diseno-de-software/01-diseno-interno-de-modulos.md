@@ -68,19 +68,19 @@ srs-back/src/modules/
 
 ```mermaid
 flowchart LR
-    subgraph presentation
+    subgraph presentation["CAPA DE PRESENTACIÓN · presentation"]
         R[child_control_route] --> H[create_handler]
         H --> PR[presenter]
     end
-    subgraph application
+    subgraph application["CAPA DE APLICACIÓN · application"]
         UC[ChildControlCreateUseCase] --> V[validate_child_control]
     end
-    subgraph domain
+    subgraph domain["CAPA DE DOMINIO · domain"]
         E[ChildControl]
         RP[[ChildControlRepositoryPort]]
         PP[["ChildPort · CareServicePort<br/>CarePackagePort · HealthFacilityPort"]]
     end
-    subgraph infrastructure
+    subgraph infrastructure["CAPA DE INFRAESTRUCTURA · infrastructure"]
         REPO[AsyncpgChildControlRepository]
         AD["ChildAdapter · CareServiceAdapter …"]
         MAP[row_to_child_control]

@@ -18,7 +18,7 @@ end
 %% =========================
 %% PRESENTACIÓN
 %% =========================
-subgraph PRESENTACION["PRESENTACIÓN"]
+subgraph PRESENTACION["CAPA DE PRESENTACIÓN"]
     direction LR
     Web["Aplicación web<br/>panel administrativo · portal familiar"]
     API["API REST<br/>autenticación · permisos"]
@@ -27,7 +27,7 @@ end
 %% =========================
 %% LÓGICA DE NEGOCIO
 %% =========================
-subgraph NEGOCIO["LÓGICA DE NEGOCIO"]
+subgraph NEGOCIO["CAPA DE LÓGICA DE NEGOCIO"]
     direction LR
     Acceso["Acceso y seguridad"]
     Territorio["Territorio"]
@@ -50,7 +50,7 @@ end
 %% =========================
 %% DATOS
 %% =========================
-subgraph DATOS["DATOS"]
+subgraph DATOS["CAPA DE DATOS"]
     direction LR
     BD[("Base de datos")]
     Archivos[("Almacenamiento de archivos")]

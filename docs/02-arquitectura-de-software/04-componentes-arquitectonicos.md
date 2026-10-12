@@ -16,9 +16,11 @@ flowchart TB
 
     subgraph API["API#nbsp;SICNA#nbsp;[Contenedor:#nbsp;Python#nbsp;+#nbsp;FastAPI#nbsp;·#nbsp;monolito#nbsp;modular]"]
         direction TB
-        REST["<b>API REST</b><br/>[Componente: rutas + middleware]<br/>Expone /api, autentica (JWT),<br/>verifica la sesión y el permiso"]
+        subgraph CPRES["CAPA#nbsp;DE#nbsp;PRESENTACIÓN"]
+            REST["<b>API REST</b><br/>[Componente: rutas + middleware]<br/>Expone /api, autentica (JWT),<br/>verifica la sesión y el permiso"]
+        end
 
-        subgraph MODS["Módulos#nbsp;de#nbsp;negocio"]
+        subgraph MODS["CAPA#nbsp;DE#nbsp;LÓGICA#nbsp;DE#nbsp;NEGOCIO#nbsp;—#nbsp;módulos"]
             direction TB
             ACC["<b>Acceso y seguridad</b><br/>[Componente: módulo]<br/>Usuarios, roles, permisos,<br/>sesiones y alertas"]
             TER["<b>Territorio</b><br/>[Componente: módulo]<br/>Micro redes y establecimientos"]
@@ -64,7 +66,8 @@ flowchart TB
     class REST,ACC,TER,NIN,CAT,CON,REC,POR,AUD,INT component
     class RENIEC,BDEXT external
     style API fill:#ffffff,stroke:#444,stroke-dasharray:8 5
-    style MODS fill:#ffffff,stroke:#888,stroke-dasharray:4 4
+    style CPRES fill:#e3eefc,stroke:#3b6fd8
+    style MODS fill:#e9f6e6,stroke:#2e8b3d
 ```
 
 ### Leyenda

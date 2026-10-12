@@ -20,7 +20,7 @@ flowchart TB
 
     subgraph SICNA["«aplicación»#nbsp;SICNA#nbsp;Backend#nbsp;[Python#nbsp;·#nbsp;FastAPI]"]
         direction TB
-        subgraph PRES["PRESENTACIÓN#nbsp;—#nbsp;depende#nbsp;de#nbsp;FastAPI"]
+        subgraph PRES["CAPA#nbsp;DE#nbsp;PRESENTACIÓN#nbsp;—#nbsp;depende#nbsp;de#nbsp;FastAPI"]
             direction LR
             p1["«middleware»<br/><b>Seguridad</b><br/>autenticación · sesión · permisos"]
             p2["«ruta»<br/><b>Rutas REST</b><br/>endpoints por módulo"]
@@ -29,7 +29,7 @@ flowchart TB
             p1 ~~~ p2 ~~~ p3 ~~~ p4
         end
 
-        subgraph UC["APLICACIÓN#nbsp;—#nbsp;casos#nbsp;de#nbsp;uso"]
+        subgraph UC["CAPA#nbsp;DE#nbsp;APLICACIÓN#nbsp;—#nbsp;casos#nbsp;de#nbsp;uso"]
             direction LR
             a1["«caso de uso»<br/><b>RegistrarNiñoCasoUso</b><br/>(ejecuta)"]
             a2["«caso de uso»<br/><b>RegistrarControlCasoUso</b><br/>(ejecuta)"]
@@ -38,7 +38,7 @@ flowchart TB
             a1 ~~~ a2 ~~~ a3 ~~~ a4
         end
 
-        subgraph DOM["DOMINIO#nbsp;—#nbsp;núcleo"]
+        subgraph DOM["CAPA#nbsp;DE#nbsp;DOMINIO#nbsp;—#nbsp;núcleo"]
             direction TB
             subgraph MOD["Modelos#nbsp;(entidades#nbsp;y#nbsp;reglas)"]
                 direction LR
@@ -61,7 +61,7 @@ flowchart TB
             MOD ~~~ CON
         end
 
-        subgraph INFRA["INFRAESTRUCTURA#nbsp;—#nbsp;depende#nbsp;de#nbsp;PostgreSQL#nbsp;y#nbsp;servicios#nbsp;externos"]
+        subgraph INFRA["CAPA#nbsp;DE#nbsp;INFRAESTRUCTURA#nbsp;—#nbsp;depende#nbsp;de#nbsp;PostgreSQL#nbsp;y#nbsp;servicios#nbsp;externos"]
             direction LR
             i1["«adaptador»<br/><b>RepositorioNiñosPostgres</b>"]
             i2["«adaptador»<br/><b>RepositorioControlesPostgres</b>"]
