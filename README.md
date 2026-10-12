@@ -67,9 +67,6 @@ Arquitectura de Software
 3. [Nivel 3 · Componentes](docs/04-modelo-c4/nivel-3-componentes.md)
 4. [Nivel 4 · Código](docs/04-modelo-c4/nivel-4-codigo.md)
 
-### 5. Verificación
-1. [Verificación de la arquitectura](docs/05-verificacion/01-verificacion-de-la-arquitectura.md)
-
 ---
 
 ## Resumen de la arquitectura
