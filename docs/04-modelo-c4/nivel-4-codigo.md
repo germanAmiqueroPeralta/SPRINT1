@@ -20,78 +20,83 @@ Mostrar **cómo está organizado el código** de un componente del nivel 3: sus 
 ## 2. Diagrama de clases
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}}}%%
 classDiagram
-    direction LR
+    direction TB
 
-    %% Presentación
-    class create_child_control_handler {
-        <<handler>>
-        +create(service, request, body)
-    }
-    class ChildControlService {
-        <<facade>>
-        +create(control)
-        +get_all(child_id, service_id, status)
-        +get_by_id(id)
-        +update(control, current)
-        +delete(id)
+    namespace CAPA_DE_PRESENTACION {
+        class create_child_control_handler {
+            <<handler>>
+            +create(service, request, body)
+        }
     }
 
-    %% Aplicación
-    class ChildControlCreateUseCase {
-        -repository: ChildControlRepositoryPort
-        -refs: ChildControlRefs
-        +execute(control) ChildControl
-    }
-    class ChildControlRefs {
-        +children: ChildPort
-        +care_services: CareServicePort
-        +care_packages: CarePackagePort
-        +health_facilities: HealthFacilityPort
-    }
-
-    %% Dominio
-    class ChildControl {
-        <<entity>>
-        +id: UUID
-        +child_id: UUID
-        +service_id: UUID
-        +status: ControlStatus
-        +scheduled_date: date
-        +completed_date: date
-    }
-    class ChildControlRepositoryPort {
-        <<interface>>
-        +create(control) ChildControl
-        +get_by_id(id) ChildControl
-        +update(control) ChildControl
-        +delete(id) str
-    }
-    class ChildPort {
-        <<interface>>
-        +get_by_id(child_id) ChildRef
-    }
-    class CareServicePort {
-        <<interface>>
-        +get_by_id(id) CareServiceRef
-    }
-    class ChildRef {
-        <<value object>>
-        +active: bool
-        +birth_date: date
-        +birth_condition: str
+    namespace CAPA_DE_APLICACION {
+        class ChildControlService {
+            <<facade>>
+            +create(control)
+            +get_all(child_id, service_id, status)
+            +get_by_id(id)
+            +update(control, current)
+            +delete(id)
+        }
+        class ChildControlCreateUseCase {
+            -repository: ChildControlRepositoryPort
+            -refs: ChildControlRefs
+            +execute(control) ChildControl
+        }
+        class ChildControlRefs {
+            +children: ChildPort
+            +care_services: CareServicePort
+            +care_packages: CarePackagePort
+            +health_facilities: HealthFacilityPort
+        }
     }
 
-    %% Infraestructura
-    class AsyncpgChildControlRepository {
-        +create(control) ChildControl
-        +get_by_id(id) ChildControl
+    namespace CAPA_DE_DOMINIO {
+        class ChildControl {
+            <<entity>>
+            +id: UUID
+            +child_id: UUID
+            +service_id: UUID
+            +status: ControlStatus
+            +scheduled_date: date
+            +completed_date: date
+        }
+        class ChildControlRepositoryPort {
+            <<interface>>
+            +create(control) ChildControl
+            +get_by_id(id) ChildControl
+            +update(control) ChildControl
+            +delete(id) str
+        }
+        class ChildPort {
+            <<interface>>
+            +get_by_id(child_id) ChildRef
+        }
+        class CareServicePort {
+            <<interface>>
+            +get_by_id(id) CareServiceRef
+        }
+        class ChildRef {
+            <<value object>>
+            +active: bool
+            +birth_date: date
+            +birth_condition: str
+        }
     }
-    class ChildAdapter {
-        +get_by_id(child_id) ChildRef
-    }
-    class CareServiceAdapter {
-        +get_by_id(id) CareServiceRef
+
+    namespace CAPA_DE_INFRAESTRUCTURA {
+        class AsyncpgChildControlRepository {
+            +create(control) ChildControl
+            +get_by_id(id) ChildControl
+        }
+        class ChildAdapter {
+            +get_by_id(child_id) ChildRef
+        }
+        class CareServiceAdapter {
+            +get_by_id(id) CareServiceRef
+        }
     }
 
     create_child_control_handler ..> ChildControlService : usa
@@ -105,6 +110,19 @@ classDiagram
     AsyncpgChildControlRepository ..|> ChildControlRepositoryPort
     ChildAdapter ..|> ChildPort
     CareServiceAdapter ..|> CareServicePort
+
+    style create_child_control_handler fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    style ChildControlService fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style ChildControlCreateUseCase fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style ChildControlRefs fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style ChildControl fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style ChildControlRepositoryPort fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style ChildPort fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style CareServicePort fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style ChildRef fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style AsyncpgChildControlRepository fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    style ChildAdapter fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    style CareServiceAdapter fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
 ```
 
 ### 2.1 Capas de Clean Architecture
@@ -116,6 +134,8 @@ classDiagram
 | **Dominio** | `ChildControl`, puertos, `ChildRef` | Reglas y contratos; no importa nada de las otras capas |
 | **Infraestructura** | Repositorio asyncpg, adaptadores | Implementa los puertos del dominio |
 
+> **Colores:** 🟦 Presentación · 🟩 Aplicación · 🟨 Dominio · 🟪 Infraestructura.
+>
 > **Regla de dependencia:** las flechas apuntan hacia el dominio. La infraestructura implementa los puertos (línea discontinua con triángulo); el dominio nunca conoce a la infraestructura.
 
 ### 2.2 Clases del módulo
