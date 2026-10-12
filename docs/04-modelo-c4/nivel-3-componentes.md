@@ -21,58 +21,70 @@ Abrir el contenedor **API SICNA** del nivel 2 y mostrar sus **componentes**: los
 ## 2. Diagrama general
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
 flowchart TB
-    Web["Aplicación web"] -->|HTTP/JSON| Entrada
-    Job["Importador de atenciones"] --> sync
+    Web["<b>Aplicación web</b>"]
+    Job["<b>Importador de atenciones</b><br/>proceso programado"]
 
-    subgraph API["API SICNA"]
+    subgraph API["API#nbsp;SICNA#nbsp;·#nbsp;monolito#nbsp;modular"]
+        direction TB
         Entrada["<b>Entrada HTTP</b><br/>AuthMiddleware · require_permission<br/>routes.py (/api)"]
 
-        subgraph Acceso["🔐 Acceso y seguridad"]
-            auth[auth]
-            user[user]
-            role[role]
-            perm[permission]
-            session[session]
-            device[device]
-            alert[security_alert]
-        end
-
-        subgraph Territorio["🗺️ Territorio"]
-            region[region]
-            hf[health_facility]
-            ur[user_region]
-        end
-
-        subgraph Atencion["👶 Atención del niño"]
-            child[child]
-            guardian[guardian]
-            cg[child_guardian]
-            pkg[care_package]
-            srv[care_service]
-            ctrl[child_control]
-        end
-
-        subgraph Reclamos["📝 Reclamos"]
-            claim[claim]
-            ev[claim_evidence]
-        end
-
-        subgraph Integraciones["🔌 Integraciones (diseñado)"]
-            identity[identity]
-            sync[attention_sync]
-        end
-
-        portal[👪 portal]
-        audit[📜 audit_log]
-
-        Entrada --> Acceso & Territorio & Atencion & Reclamos & Integraciones & portal & audit
+            subgraph Acceso["🔐#nbsp;Acceso#nbsp;y#nbsp;seguridad"]
+                direction LR
+                auth[auth] ~~~ user[user] ~~~ role[role] ~~~ perm[permission] ~~~ session[session] ~~~ device[device] ~~~ alert[security_alert]
+            end
+            subgraph Territorio["🗺️#nbsp;Territorio"]
+                direction LR
+                region[region] ~~~ hf[health_facility] ~~~ ur[user_region]
+            end
+            subgraph Atencion["👶#nbsp;Atención#nbsp;del#nbsp;niño"]
+                direction LR
+                child[child] ~~~ guardian[guardian] ~~~ cg[child_guardian] ~~~ pkg[care_package] ~~~ srv[care_service] ~~~ ctrl[child_control]
+            end
+            subgraph Reclamos["📝#nbsp;Reclamos"]
+                direction LR
+                claim[claim] ~~~ ev[claim_evidence]
+            end
+            subgraph Transv["👪#nbsp;Portal#nbsp;y#nbsp;📜#nbsp;auditoría"]
+                direction LR
+                portal[portal] ~~~ audit[audit_log]
+            end
+            subgraph Integraciones["🔌#nbsp;Integraciones#nbsp;(diseñado)"]
+                direction LR
+                identity[identity] ~~~ sync[attention_sync]
+            end
+            Entrada -->|enruta cada petición al módulo| Acceso
+            Acceso ~~~ Territorio ~~~ Atencion ~~~ Reclamos ~~~ Transv ~~~ Integraciones
     end
 
-    API --> BD[("PostgreSQL")]
-    Reclamos --> FS[("Archivos")]
-    identity -->|HTTPS| RENIEC["API RENIEC"]
-    sync -->|solo lectura| BDEXT[("BD externa")]
+    BD[("<b>PostgreSQL</b>")]
+    FS[("<b>Archivos</b><br/>evidencias")]
+    RENIEC["<b>API RENIEC</b>"]
+    BDEXT[("<b>BD externa</b><br/>de atenciones")]
+
+    Web -->|HTTP/JSON| Entrada
+    Integraciones ~~~ Job
+    Job -.->|ejecuta attention_sync| Integraciones
+    Integraciones ~~~ BD
+    API -->|SQL| BD
+    Reclamos -->|guarda| FS
+    Integraciones -->|"identity · HTTPS"| RENIEC
+    Integraciones -->|"attention_sync · solo lectura"| BDEXT
+
+    classDef mod fill:#ffffff,stroke:#475569,color:#111827
+    classDef ext fill:#e5e7eb,stroke:#4b5563,color:#111827
+    classDef entry fill:#1e3a8a,stroke:#1e3a8a,color:#ffffff
+    class auth,user,role,perm,session,device,alert,region,hf,ur,child,guardian,cg,pkg,srv,ctrl,claim,ev,portal,audit,identity,sync mod
+    class Web,Job,BD,FS,RENIEC,BDEXT ext
+    class Entrada entry
+    style API fill:#f8fafc,stroke:#334155,stroke-width:2px,stroke-dasharray:8 5,color:#0f172a
+    style Acceso fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    style Territorio fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    style Atencion fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    style Reclamos fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style Transv fill:#e0f2fe,stroke:#0369a1,stroke-width:2px,color:#0c4a6e
+    style Integraciones fill:#fce7f3,stroke:#db2777,stroke-width:2px,stroke-dasharray:6 4,color:#831843
 ```
 
 > El diagrama general muestra **cómo se agrupan** los módulos. Las dependencias entre ellos se muestran por separado abajo para que se lean con claridad.
@@ -84,45 +96,49 @@ flowchart TB
 Cada flecha significa "**usa a**", siempre mediante un **puerto** declarado en el dominio del módulo que llama y un **adaptador** en su infraestructura.
 
 ```mermaid
-flowchart LR
-    subgraph Integraciones
-        identity[identity]
-        sync[attention_sync]
-    end
-    subgraph Atencion["Atención del niño"]
-        child[child]
-        guardian[guardian]
-        cg[child_guardian]
-        pkg[care_package]
-        srv[care_service]
-        ctrl[child_control]
-    end
-    subgraph Base["Territorio y acceso"]
-        hf[health_facility]
-        region[region]
-        user[user]
-        role[role]
-    end
-    subgraph Familias["Reclamos y portal"]
-        claim[claim]
-        ev[claim_evidence]
-        portal[portal]
-    end
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#111827", "primaryBorderColor": "#475569", "lineColor": "#64748b", "textColor": "#111827", "titleColor": "#111827", "edgeLabelBackground": "#ffffff", "clusterBkg": "#f8fafc", "clusterBorder": "#94a3b8"}, "flowchart": {"wrappingWidth": 600}}}%%
+flowchart TB
+    portal[portal]
+    claim[claim]
+    ev[claim_evidence]
+    sync[attention_sync]
+    identity[identity]
+    cg[child_guardian]
+    ctrl[child_control]
+    child[child]
+    guardian[guardian]
+    srv[care_service]
+    pkg[care_package]
+    hf[health_facility]
+    user[user]
+    region[region]
+    role[role]
 
-    child --> hf
+    portal --> claim & ev & ctrl & pkg & srv & hf
+    ev --> claim
+    claim --> child & srv & hf
+    sync -.->|diseñado| child & srv & ctrl
+    cg --> child & guardian
+    ctrl --> child & srv & pkg & hf
     child -.->|diseñado| identity
     guardian -.->|diseñado| identity
+    child --> hf
     guardian --> user & role
-    cg --> child & guardian
     srv --> pkg
-    ctrl --> child & srv & pkg & hf
-    sync -.->|diseñado| child & srv & ctrl
     hf --> region
     user --> role
-    claim --> child & srv & hf
-    ev --> claim
-    portal --> claim & ev & ctrl & pkg & srv & hf
+
+    classDef rec fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    classDef int fill:#fce7f3,stroke:#db2777,stroke-width:2px,stroke-dasharray:6 4,color:#831843
+    classDef ate fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    classDef bas fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    class portal,claim,ev rec
+    class sync,identity int
+    class cg,ctrl,child,guardian,srv,pkg ate
+    class hf,user,region,role bas
 ```
+
+**Colores:** 🟨 Reclamos y portal · 🟩 Atención del niño · 🟪 Territorio y acceso · 🩷 Integraciones (borde punteado: diseñado, aún no programado).
 
 | Origen | Destino | Para qué | Puerto que usa el origen |
 |---|---|---|---|
