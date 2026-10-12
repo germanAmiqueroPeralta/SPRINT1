@@ -7,12 +7,12 @@ SICNA tiene **3 tipos de usuario**. Cada uno corresponde a un rol del sistema co
 | Actor | Rol en el sistema | ¿Qué necesita realizar? |
 |---|---|---|
 | **Administrador general** | `admin` | Tiene acceso total. Administra usuarios, roles y permisos, micro redes y establecimientos, y el catálogo de paquetes y prestaciones. Revisa la auditoría y la seguridad (sesiones, dispositivos y alertas de riesgo) y supervisa la carga de atenciones desde la base de datos externa. |
-| **Administrador limitado** (coordinador) | `health_staff` | Tiene acceso restringido a la atención del niño. Registra niños y padres, los vincula, registra y corrige controles CRED y responde los reclamos de las familias. **No puede** gestionar usuarios, roles, permisos, el catálogo ni la seguridad. |
+| **Coordinador** | `health_staff` | Tiene acceso restringido a la atención del niño. Registra niños y padres, los vincula, registra y corrige controles CRED y responde los reclamos de las familias. **No puede** gestionar usuarios, roles, permisos, el catálogo ni la seguridad. |
 | **Padre, madre o apoderado** | `guardian` | Usa el portal familiar: consulta a sus hijos y sus controles, presenta reclamos y adjunta evidencias (fotos o PDF). Solo ve la información de sus propios hijos. |
 
 ### Comparación de permisos
 
-| Funcionalidad | Administrador general | Administrador limitado | Padre / apoderado |
+| Funcionalidad | Administrador general | Coordinador | Padre / apoderado |
 |---|:---:|:---:|:---:|
 | Usuarios, roles y permisos | ✅ | — | — |
 | Micro redes y establecimientos | ✅ | Solo consulta | — |
@@ -24,7 +24,7 @@ SICNA tiene **3 tipos de usuario**. Cada uno corresponde a un rol del sistema co
 | Carga de atenciones desde la BD externa | ✅ (ejecutar y revisar) | Solo consulta del resultado | — |
 | Sesiones, dispositivos, alertas y auditoría | ✅ | — | — |
 
-> Los permisos no están fijos en el código: se asignan a cada rol desde la base de datos (RBAC), así que el administrador general puede ampliar o reducir lo que hace el administrador limitado.
+> Los permisos no están fijos en el código: se asignan a cada rol desde la base de datos (RBAC), así que el administrador general puede ampliar o reducir lo que hace el coordinador.
 
 ## Actores secundarios (sistemas externos)
 

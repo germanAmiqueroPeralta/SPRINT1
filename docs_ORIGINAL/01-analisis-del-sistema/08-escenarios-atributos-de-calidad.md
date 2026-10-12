@@ -13,12 +13,12 @@
 | **Verificación** | Prueba realizada: el padre intentó reclamar sobre un niño ajeno y entrar a `/users`, y ambos intentos fueron rechazados (ver [verificación](../05-verificacion/01-verificacion-de-la-arquitectura.md)). |
 | **Estado** | Verificado en pruebas. |
 
-## EQ-02. Seguridad: el administrador limitado intenta una operación del general
+## EQ-02. Seguridad: el coordinador intenta una operación del general
 
 | Elemento | Descripción |
 |---|---|
 | **Atributo de calidad** | Seguridad |
-| **Fuente** | Administrador limitado autenticado |
+| **Fuente** | Coordinador autenticado |
 | **Estímulo** | Intenta crear un usuario, cambiar los permisos de un rol o bloquear un dispositivo. |
 | **Condición** | Su rol no tiene los permisos `user.post`, `role.put` ni `device.put`. |
 | **Respuesta esperada** | El sistema responde 403 indicando el permiso que falta y no ejecuta el cambio. |
@@ -31,7 +31,7 @@
 | Elemento | Descripción |
 |---|---|
 | **Atributo de calidad** | Disponibilidad y tolerancia a fallos |
-| **Fuente** | Administrador limitado |
+| **Fuente** | Coordinador |
 | **Estímulo** | Consulta un DNI mientras la API de RENIEC está caída o tarda demasiado. |
 | **Condición** | RENIEC no responde dentro del tiempo límite. |
 | **Respuesta esperada** | SICNA responde "servicio de identidad no disponible" y permite completar el registro manualmente. El resto del sistema sigue funcionando. |
@@ -70,7 +70,7 @@
 | Elemento | Descripción |
 |---|---|
 | **Atributo de calidad** | Trazabilidad |
-| **Fuente** | Administrador limitado o importador de atenciones |
+| **Fuente** | Coordinador o importador de atenciones |
 | **Estímulo** | Se modifica un niño o un control. |
 | **Condición** | Funcionamiento normal. |
 | **Respuesta esperada** | Se crea un registro de auditoría con el autor, la acción, la tabla y los valores anteriores y nuevos. |
@@ -96,7 +96,7 @@
 | Código | Atributo | Qué se busca comprobar | Estado |
 |---|---|---|---|
 | EQ-01 | Seguridad | Que un padre solo acceda a sus propios hijos | Verificado |
-| EQ-02 | Seguridad | Que el administrador limitado no administre la plataforma | Implementado |
+| EQ-02 | Seguridad | Que el coordinador no administre la plataforma | Implementado |
 | EQ-03 | Tolerancia a fallos | Que una caída de RENIEC no detenga el sistema | Diseñado |
 | EQ-04 | Integridad | Que la carga no guarde atenciones inválidas | Diseñado |
 | EQ-05 | Integridad | Que repetir la carga no duplique controles | Parcial |

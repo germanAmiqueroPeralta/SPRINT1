@@ -147,11 +147,11 @@ flowchart LR
 | **user** · **role** · **permission** | Cuentas, roles y permisos (RBAC) | `/api/users`, `/api/roles`, `/api/permissions` | Administrador general |
 | **session** · **device** · **security_alert** | Sesiones, dispositivos y alertas de riesgo | `/api/sessions`, `/api/devices`, `/api/security-alerts` | Administrador general |
 | **region** · **health_facility** · **user_region** | Micro redes, establecimientos y su asignación al personal | `/api/regions`, `/api/health-facilities`, `/api/user-regions` | Administrador general |
-| **child** | Niños del padrón | `/api/children` | Administrador limitado |
-| **guardian** · **child_guardian** | Padres o apoderados y su vínculo con los niños | `/api/guardians`, `/api/child-guardians` | Administrador limitado |
+| **child** | Niños del padrón | `/api/children` | Coordinador |
+| **guardian** · **child_guardian** | Padres o apoderados y su vínculo con los niños | `/api/guardians`, `/api/child-guardians` | Coordinador |
 | **care_package** · **care_service** | Catálogo SISNAT: paquetes y prestaciones por edad | `/api/care-packages`, `/api/care-services` | Administrador general |
-| **child_control** | Controles CRED de cada niño | `/api/child-controls` | Administrador limitado |
-| **claim** · **claim_evidence** | Reclamos y sus evidencias | `/api/claims`, `/api/claim-evidences` | Administrador limitado |
+| **child_control** | Controles CRED de cada niño | `/api/child-controls` | Coordinador |
+| **claim** · **claim_evidence** | Reclamos y sus evidencias | `/api/claims`, `/api/claim-evidences` | Coordinador |
 | **portal** | Vista del padre: sus hijos, controles y reclamos | `/api/portal` | Padre / apoderado |
 | **audit_log** | Consulta de la auditoría | `/api/audit-logs` | Administrador general |
 | **identity** *(diseñado)* | Consulta de DNI en RENIEC | `/api/identity/{dni}` | Administradores |

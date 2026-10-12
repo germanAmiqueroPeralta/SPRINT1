@@ -128,7 +128,7 @@ Están en `application/child_control_validate.py`. La base de datos las refuerza
 
 ```mermaid
 sequenceDiagram
-    actor PS as Administrador limitado
+    actor PS as Coordinador
     participant R as child_control_route
     participant H as create_handler
     participant UC as ChildControlCreateUseCase
@@ -162,7 +162,7 @@ sequenceDiagram
 
 | Paso | Origen → destino | Acción | Capa |
 |---|---|---|---|
-| 1 | Administrador limitado → ruta | `POST /api/child-controls` | Presentación |
+| 1 | Coordinador → ruta | `POST /api/child-controls` | Presentación |
 | 2 | Ruta | Verifica el permiso `child_control.post` | Presentación |
 | 3 | Handler → caso de uso | Arma la entidad `ChildControl` y llama a `execute()` | Presentación → Aplicación |
 | 4 | Caso de uso → validación | Aplica las reglas RN-01 a RN-07 | Aplicación |

@@ -22,7 +22,7 @@ Mostrar **SICNA como una sola caja**: quiénes lo usan y con qué sistemas exter
 ```mermaid
 flowchart TB
     AG["👤 <b>Administrador general</b><br/><i>[Persona]</i><br/>Acceso total: usuarios, permisos,<br/>catálogo, territorio, seguridad<br/>y carga de atenciones"]
-    AL["👤 <b>Administrador limitado</b><br/><i>[Persona]</i><br/>Coordinador: registra niños, padres<br/>y controles; atiende reclamos"]
+    AL["👤 <b>Coordinador</b><br/><i>[Persona]</i><br/>Registra niños, padres<br/>y controles; atiende reclamos"]
     PA["👤 <b>Padre / apoderado</b><br/><i>[Persona]</i><br/>Consulta a sus hijos<br/>y presenta reclamos"]
 
     SICNA["<b>SICNA</b><br/><i>[Sistema de software]</i><br/>Sistema de Control del Niño:<br/>seguimiento CRED de los niños<br/>de la red de salud y portal familiar"]
@@ -51,7 +51,7 @@ flowchart TB
 | Persona | Rol | Qué hace en el sistema |
 |---|---|---|
 | **Administrador general** | `admin` | Gestiona usuarios, roles, permisos, micro redes, establecimientos y el catálogo; revisa la auditoría, las sesiones, los dispositivos y las alertas; ejecuta y revisa la carga de atenciones |
-| **Administrador limitado** | `health_staff` | Coordinador de un establecimiento o micro red. Registra niños y padres (con ayuda de RENIEC), los vincula, registra y corrige controles CRED y responde los reclamos. No administra la plataforma |
+| **Coordinador** | `health_staff` | Coordinador de un establecimiento o micro red. Registra niños y padres (con ayuda de RENIEC), los vincula, registra y corrige controles CRED y responde los reclamos. No administra la plataforma |
 | **Padre / apoderado** | `guardian` | Usa el portal familiar para ver a sus hijos y sus controles, y presenta reclamos con evidencias |
 
 ---
@@ -71,7 +71,7 @@ flowchart TB
 | Origen | Destino | Descripción | Protocolo |
 |---|---|---|---|
 | Administrador general | SICNA | Administra la plataforma y supervisa las cargas | — |
-| Administrador limitado | SICNA | Registra la atención de los niños | — |
+| Coordinador | SICNA | Registra la atención de los niños | — |
 | Padre / apoderado | SICNA | Consulta y reclama | — |
 | SICNA | API de RENIEC | Consulta datos de identidad por DNI | HTTPS/JSON |
 | SICNA | BD de atenciones | Lee las atenciones nuevas de forma programada | SQL de solo lectura |

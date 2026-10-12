@@ -23,12 +23,12 @@ Abrir la caja «SICNA» del nivel 1 y mostrar los **contenedores**: las aplicaci
 ```mermaid
 flowchart TB
     AG["👤 Administrador general"]
-    AL["👤 Administrador limitado"]
+    AL["👤 Coordinador"]
     PA["👤 Padre / apoderado"]
 
     subgraph SICNA["SICNA · límite del sistema"]
         direction TB
-        Web["<b>Aplicación web</b><br/><i>[Next.js 16 + React 19]</i><br/>Panel del administrador general,<br/>panel del administrador limitado<br/>y portal familiar"]
+        Web["<b>Aplicación web</b><br/><i>[Next.js 16 + React 19]</i><br/>Panel del administrador general,<br/>panel del coordinador<br/>y portal familiar"]
         API["<b>API SICNA</b><br/><i>[Python + FastAPI]</i><br/>Monolito modular:<br/>reglas de negocio, seguridad y permisos"]
         IMP["<b>Importador de atenciones</b><br/><i>[Python · proceso programado]</i><br/>Carga nocturna o a pedido;<br/>usa los mismos módulos que la API"]
         BD[("<b>Base de datos</b><br/><i>[PostgreSQL]</i><br/>Datos del negocio, sesiones,<br/>auditoría y triggers")]

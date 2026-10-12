@@ -15,12 +15,12 @@ Además, SICNA **carga las atenciones** desde la base de datos de la red de salu
 | Usuario | Rol | Qué hace |
 |---|---|---|
 | **Administrador general** | `admin` | Acceso total: usuarios, permisos, catálogo, territorio, seguridad, auditoría y carga de atenciones |
-| **Administrador limitado** | `health_staff` | Coordinador: registra niños, padres y controles, y atiende reclamos |
+| **Coordinador** | `health_staff` | Registra niños, padres y controles, y atiende reclamos |
 | **Padre / apoderado** | `guardian` | Portal familiar: consulta a sus hijos y presenta reclamos |
 
 ## Caso de estudio
 
-Red de salud con micro redes y establecimientos (centros y puestos de salud) que atienden a niños menores de 6 años. Las atenciones que registran los establecimientos se cargan en SICNA; el administrador limitado completa y corrige la información y los padres la consultan desde el portal.
+Red de salud con micro redes y establecimientos (centros y puestos de salud) que atienden a niños menores de 6 años. Las atenciones que registran los establecimientos se cargan en SICNA; el coordinador completa y corrige la información y los padres la consultan desde el portal.
 
 ## Curso
 
@@ -79,7 +79,7 @@ Arquitectura de Software
 | **Estilo arquitectónico** | Monolito modular + capas |
 | **Patrón arquitectónico** | Clean Architecture |
 | **Módulos del backend** | 19 implementados + 2 diseñados (`identity` para RENIEC y `attention_sync` para la carga de atenciones) |
-| **Usuarios** | 3: administrador general, administrador limitado y padre o apoderado |
+| **Usuarios** | 3: administrador general, coordinador y padre o apoderado |
 | **Sistemas externos** | API de RENIEC y BD de atenciones de la red de salud |
 | **Capas de cada módulo** | Dominio, Aplicación, Infraestructura y Presentación |
 
