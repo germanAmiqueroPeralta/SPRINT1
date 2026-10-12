@@ -10,7 +10,7 @@
 | **Condición** | El padre tiene una sesión válida. |
 | **Respuesta esperada** | El sistema rechaza la operación (403) y no revela datos del otro niño. |
 | **Medida** | El 100 % de los intentos de las pruebas son rechazados, sin datos sensibles en la respuesta. |
-| **Verificación** | Prueba realizada: el padre intentó reclamar sobre un niño ajeno y entrar a `/users`, y ambos intentos fueron rechazados (ver [verificación](../05-verificacion/01-verificacion-de-la-arquitectura.md)). |
+| **Verificación** | Prueba realizada: el padre intentó reclamar sobre un niño ajeno y entrar a `/users`, y ambos intentos fueron rechazados. |
 | **Estado** | Verificado en pruebas. |
 
 ## EQ-02. Seguridad: el coordinador intenta una operación del general
