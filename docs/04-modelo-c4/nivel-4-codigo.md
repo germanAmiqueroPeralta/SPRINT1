@@ -150,7 +150,7 @@ classDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    actor PS as Personal de salud
+    actor PS as Administrador limitado
     participant MW as AuthMiddleware
     participant H as Handler
     participant UC as ChildControlCreateUseCase

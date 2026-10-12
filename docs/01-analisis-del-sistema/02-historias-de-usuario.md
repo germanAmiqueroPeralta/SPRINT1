@@ -2,13 +2,16 @@
 
 | ID | Historia de usuario | Actor |
 |---|---|---|
-| HU01 | Como personal de salud, quiero registrar a un niño con sus datos de padrón y su establecimiento, para poder hacerle seguimiento. | Personal de salud |
-| HU02 | Como personal de salud, quiero registrar a los padres o apoderados y vincularlos con sus hijos, para saber a quién contactar y darles acceso al portal. | Personal de salud |
-| HU03 | Como personal de salud, quiero registrar los controles CRED de cada niño según su edad, para llevar el control de las prestaciones realizadas y pendientes. | Personal de salud |
-| HU04 | Como administrador, quiero gestionar el catálogo de paquetes y prestaciones por edad, para que los controles sigan la norma vigente. | Administrador |
-| HU05 | Como administrador, quiero gestionar micro redes, establecimientos, usuarios, roles y permisos, para organizar quién trabaja dónde y qué puede hacer. | Administrador |
-| HU06 | Como padre o apoderado, quiero ver a mis hijos y sus controles en el portal familiar, para saber si están al día. | Padre / apoderado |
-| HU07 | Como padre o apoderado, quiero presentar un reclamo sobre la atención de mi hijo y adjuntar evidencias, para que el establecimiento lo revise. | Padre / apoderado |
-| HU08 | Como personal de salud, quiero revisar y responder los reclamos, para resolver los problemas de atención. | Personal de salud |
-| HU09 | Como administrador, quiero ver las sesiones, los dispositivos y las alertas de riesgo, y poder bloquearlos, para proteger las cuentas. | Administrador |
-| HU10 | Como administrador, quiero consultar la auditoría de cambios, para saber quién modificó qué información y cuándo. | Administrador |
+| HU01 | Como administrador limitado, quiero registrar a un niño con sus datos de padrón y su establecimiento, para poder hacerle seguimiento. | Administrador limitado |
+| HU02 | Como administrador limitado, quiero ingresar el DNI de un niño o de un padre y que el sistema traiga sus datos de RENIEC, para registrarlos más rápido y sin errores de digitación. | Administrador limitado |
+| HU03 | Como administrador limitado, quiero registrar a los padres o apoderados y vincularlos con sus hijos, para saber a quién contactar y darles acceso al portal. | Administrador limitado |
+| HU04 | Como administrador limitado, quiero registrar y corregir los controles CRED de cada niño, para llevar el control de las prestaciones realizadas y pendientes. | Administrador limitado |
+| HU05 | Como administrador general, quiero que las atenciones registradas en la base de datos de la red de salud se carguen automáticamente en SICNA, para que los controles estén al día sin digitarlos dos veces. | Administrador general |
+| HU06 | Como administrador general, quiero ver el resultado de cada carga de atenciones (cuántas se aplicaron, cuántas se omitieron y por qué), para corregir los datos que no coincidan. | Administrador general |
+| HU07 | Como administrador general, quiero gestionar el catálogo de paquetes y prestaciones por edad, para que los controles sigan la norma vigente. | Administrador general |
+| HU08 | Como administrador general, quiero gestionar micro redes, establecimientos, usuarios, roles y permisos, para organizar quién trabaja dónde y qué puede hacer cada uno. | Administrador general |
+| HU09 | Como padre o apoderado, quiero ver a mis hijos y sus controles en el portal familiar, para saber si están al día. | Padre / apoderado |
+| HU10 | Como padre o apoderado, quiero presentar un reclamo sobre la atención de mi hijo y adjuntar evidencias, para que el establecimiento lo revise. | Padre / apoderado |
+| HU11 | Como administrador limitado, quiero revisar y responder los reclamos, para resolver los problemas de atención. | Administrador limitado |
+| HU12 | Como administrador general, quiero ver las sesiones, los dispositivos y las alertas de riesgo, y poder bloquearlos, para proteger las cuentas. | Administrador general |
+| HU13 | Como administrador general, quiero consultar la auditoría de cambios, para saber quién modificó qué información, cuándo y desde dónde. | Administrador general |

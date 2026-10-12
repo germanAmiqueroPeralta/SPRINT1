@@ -6,11 +6,21 @@
 
 ## Descripción
 
-SICNA es un sistema web para que una red de salud haga el **seguimiento del control de crecimiento y desarrollo (CRED)** de los niños de su jurisdicción. Organiza el catálogo de paquetes y prestaciones de atención por edad (catálogo SISNAT), registra los controles de cada niño en los establecimientos de salud y ofrece a los padres un **portal familiar** donde ven el avance de sus hijos y pueden presentar reclamos con evidencias.
+SICNA es un sistema web para que una red de salud haga el **seguimiento del control de crecimiento y desarrollo (CRED)** de los niños de su jurisdicción. Organiza el catálogo de paquetes y prestaciones de atención por edad (catálogo SISNAT), registra los controles de cada niño y ofrece a los padres un **portal familiar** donde ven el avance de sus hijos y pueden presentar reclamos con evidencias.
+
+Además, SICNA **carga las atenciones** desde la base de datos de la red de salud para mantener los controles al día, y **consulta la API de RENIEC** para validar y autocompletar los datos de niños y padres a partir del DNI.
+
+## Usuarios
+
+| Usuario | Rol | Qué hace |
+|---|---|---|
+| **Administrador general** | `admin` | Acceso total: usuarios, permisos, catálogo, territorio, seguridad, auditoría y carga de atenciones |
+| **Administrador limitado** | `health_staff` | Coordinador: registra niños, padres y controles, y atiende reclamos |
+| **Padre / apoderado** | `guardian` | Portal familiar: consulta a sus hijos y presenta reclamos |
 
 ## Caso de estudio
 
-Red de salud con micro redes y establecimientos (centros y puestos de salud) que atienden a niños menores de 6 años. El personal de salud registra a los niños, los vincula con sus padres o apoderados y anota cada control realizado. Los padres consultan y reclaman desde el portal.
+Red de salud con micro redes y establecimientos (centros y puestos de salud) que atienden a niños menores de 6 años. Las atenciones que registran los establecimientos se cargan en SICNA; el administrador limitado completa y corrige la información y los padres la consultan desde el portal.
 
 ## Curso
 
@@ -24,6 +34,7 @@ Arquitectura de Software
 | Backend | Python + FastAPI (`srs-back/`) |
 | Base de datos | PostgreSQL |
 | Archivos | Almacenamiento local (`uploads/`) para las evidencias de reclamos |
+| Integraciones | API de RENIEC (HTTPS) y base de datos externa de atenciones (solo lectura) |
 
 ---
 
@@ -67,7 +78,9 @@ Arquitectura de Software
 |---|---|
 | **Estilo arquitectónico** | Monolito modular + capas |
 | **Patrón arquitectónico** | Clean Architecture |
-| **Módulos del backend** | 19 (niños, controles, reclamos, padres, catálogo, seguridad, etc.) |
+| **Módulos del backend** | 19 implementados + 2 diseñados (`identity` para RENIEC y `attention_sync` para la carga de atenciones) |
+| **Usuarios** | 3: administrador general, administrador limitado y padre o apoderado |
+| **Sistemas externos** | API de RENIEC y BD de atenciones de la red de salud |
 | **Capas de cada módulo** | Dominio, Aplicación, Infraestructura y Presentación |
 
 > Los diagramas están escritos en **Mermaid**. Se ven directamente en GitHub y en VS Code (con la extensión *Markdown Preview Mermaid Support*).

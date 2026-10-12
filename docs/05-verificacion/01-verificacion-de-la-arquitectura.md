@@ -67,3 +67,15 @@ Además se probó un ciclo completo de escritura en la versión nueva: crear, ed
 | Contrato OpenAPI | La API no cambió | ✅ |
 | Comparación de respuestas | El comportamiento no cambió | ✅ 139 de 139 |
 | Ciclo de escritura | Crear, editar y borrar funcionan con la nueva arquitectura | ✅ |
+
+---
+
+## Pendiente de verificar
+
+Los módulos **diseñados** todavía no existen en el código, así que no forman parte de estas pruebas. Cuando se implementen, se verificarán así:
+
+| Módulo | Prueba prevista |
+|---|---|
+| `identity` (RENIEC) | Probar con un adaptador falso: DNI encontrado (200), no encontrado (404), RENIEC caído o lento (503 en 5 s como máximo) |
+| `attention_sync` (carga de atenciones) | Ejecutar la carga con datos de prueba que incluyan atenciones válidas, de niños inexistentes y con fechas inválidas; luego repetirla y comprobar que no se duplicaron controles |
+| Ambos | Volver a ejecutar la búsqueda automática de la regla de dependencia sobre los módulos nuevos |

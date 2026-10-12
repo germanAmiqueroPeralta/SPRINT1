@@ -1,22 +1,42 @@
 # Actores
 
-## Actores principales (personas)
+## Actores principales (usuarios)
+
+SICNA tiene **3 tipos de usuario**. Cada uno corresponde a un rol del sistema con sus propios permisos.
 
 | Actor | Rol en el sistema | ¿Qué necesita realizar? |
 |---|---|---|
-| **Administrador** | `admin` | Administrar toda la plataforma: usuarios, roles y permisos, micro redes y establecimientos, catálogo de paquetes y prestaciones, revisar la auditoría y la seguridad (sesiones, dispositivos y alertas de riesgo). |
-| **Personal de salud** (coordinador) | `health_staff` | Registrar niños y a sus padres o apoderados, vincularlos, registrar y actualizar los controles CRED, y atender (responder) los reclamos de las familias. |
-| **Padre, madre o apoderado** | `guardian` | Ingresar al portal familiar, consultar a sus hijos y sus controles, presentar reclamos y adjuntar evidencias (fotos o PDF). |
+| **Administrador general** | `admin` | Tiene acceso total. Administra usuarios, roles y permisos, micro redes y establecimientos, y el catálogo de paquetes y prestaciones. Revisa la auditoría y la seguridad (sesiones, dispositivos y alertas de riesgo) y supervisa la carga de atenciones desde la base de datos externa. |
+| **Administrador limitado** (coordinador) | `health_staff` | Tiene acceso restringido a la atención del niño. Registra niños y padres, los vincula, registra y corrige controles CRED y responde los reclamos de las familias. **No puede** gestionar usuarios, roles, permisos, el catálogo ni la seguridad. |
+| **Padre, madre o apoderado** | `guardian` | Usa el portal familiar: consulta a sus hijos y sus controles, presenta reclamos y adjunta evidencias (fotos o PDF). Solo ve la información de sus propios hijos. |
 
-## Actores secundarios (sistemas)
+### Comparación de permisos
+
+| Funcionalidad | Administrador general | Administrador limitado | Padre / apoderado |
+|---|:---:|:---:|:---:|
+| Usuarios, roles y permisos | ✅ | — | — |
+| Micro redes y establecimientos | ✅ | Solo consulta | — |
+| Catálogo de paquetes y prestaciones | ✅ | Solo consulta | Solo consulta (portal) |
+| Niños, padres y vínculos | ✅ | ✅ | Solo sus hijos |
+| Controles CRED | ✅ | ✅ | Solo los de sus hijos |
+| Reclamos | ✅ | Revisar y responder | Presentar y adjuntar evidencias |
+| Consulta de DNI en RENIEC | ✅ | ✅ | — |
+| Carga de atenciones desde la BD externa | ✅ (ejecutar y revisar) | Solo consulta del resultado | — |
+| Sesiones, dispositivos, alertas y auditoría | ✅ | — | — |
+
+> Los permisos no están fijos en el código: se asignan a cada rol desde la base de datos (RBAC), así que el administrador general puede ampliar o reducir lo que hace el administrador limitado.
+
+## Actores secundarios (sistemas externos)
 
 | Actor | Tipo | ¿Qué hace? |
 |---|---|---|
-| **Base de datos PostgreSQL** | Almacén de datos | Guarda la información del negocio y ejecuta reglas de integridad y auditoría (triggers). |
-| **Almacenamiento de archivos** | Almacén de archivos | Guarda las evidencias (JPG, PNG o PDF) que acompañan a los reclamos. |
+| **API de RENIEC** | Servicio web externo | Devuelve los datos de identidad de una persona a partir de su DNI (nombres, apellidos, fecha de nacimiento). SICNA lo usa para validar y autocompletar los datos de niños y padres. |
+| **Base de datos externa de atenciones** | Base de datos de la red de salud | Contiene las atenciones registradas en los establecimientos. SICNA la **lee periódicamente** para actualizar los controles CRED de cada niño. |
 
-> En esta versión SICNA **no se integra con sistemas externos de terceros**. El catálogo SISNAT de paquetes y prestaciones se carga como datos dentro del propio sistema. La integración con sistemas del MINSA queda como trabajo futuro (ver [decisiones arquitectónicas](07-decisiones-arquitectonicas.md)).
+## Actores secundarios (internos)
 
-## Diferencia con un sistema de comercio
-
-A diferencia de un marketplace, en SICNA **no hay pagos ni ventas**: el valor del sistema está en el **seguimiento oportuno de la salud del niño**, la **trazabilidad** de cada cambio y la **protección de los datos** de menores de edad.
+| Actor | Tipo | ¿Qué hace? |
+|---|---|---|
+| **Importador de atenciones** | Proceso programado | Se ejecuta automáticamente (por ejemplo, cada noche) o cuando el administrador general lo inicia. Lee la base externa y actualiza los controles. |
+| **Base de datos PostgreSQL** | Almacén de datos | Guarda la información del negocio y ejecuta las reglas de integridad y la auditoría (triggers). |
+| **Almacenamiento de archivos** | Almacén de archivos | Guarda las evidencias de los reclamos. |

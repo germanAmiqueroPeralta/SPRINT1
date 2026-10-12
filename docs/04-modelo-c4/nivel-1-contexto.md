@@ -6,7 +6,7 @@
 
 ## 1. Objetivo
 
-Mostrar **SICNA como una sola caja**: quiénes lo usan y con qué sistemas se comunica.
+Mostrar **SICNA como una sola caja**: quiénes lo usan y con qué sistemas externos se comunica.
 
 | Aspecto | Descripción |
 |---|---|
@@ -21,36 +21,38 @@ Mostrar **SICNA como una sola caja**: quiénes lo usan y con qué sistemas se co
 
 ```mermaid
 flowchart TB
-    Admin["👤 <b>Administrador</b><br/>Gestiona la plataforma,<br/>el catálogo y la seguridad"]
-    Staff["👤 <b>Personal de salud</b><br/>Registra niños, padres<br/>y controles CRED"]
-    Padre["👤 <b>Padre / apoderado</b><br/>Consulta a sus hijos<br/>y presenta reclamos"]
+    AG["👤 <b>Administrador general</b><br/><i>[Persona]</i><br/>Acceso total: usuarios, permisos,<br/>catálogo, territorio, seguridad<br/>y carga de atenciones"]
+    AL["👤 <b>Administrador limitado</b><br/><i>[Persona]</i><br/>Coordinador: registra niños, padres<br/>y controles; atiende reclamos"]
+    PA["👤 <b>Padre / apoderado</b><br/><i>[Persona]</i><br/>Consulta a sus hijos<br/>y presenta reclamos"]
 
-    SICNA["<b>SICNA</b><br/>Sistema de Control del Niño<br/><i>Seguimiento CRED de los niños<br/>de la red de salud</i>"]
+    SICNA["<b>SICNA</b><br/><i>[Sistema de software]</i><br/>Sistema de Control del Niño:<br/>seguimiento CRED de los niños<br/>de la red de salud y portal familiar"]
 
-    MINSA["<b>Sistemas del MINSA</b><br/><i>(fuera del alcance actual)</i>"]
+    RENIEC["<b>API de RENIEC</b><br/><i>[Sistema externo]</i><br/>Datos oficiales de identidad<br/>a partir del DNI"]
+    BDEXT["<b>BD de atenciones de la red de salud</b><br/><i>[Sistema externo]</i><br/>Atenciones registradas<br/>en los establecimientos"]
 
-    Admin -->|"Administra usuarios, catálogo,<br/>territorio y seguridad"| SICNA
-    Staff -->|"Registra niños, vínculos<br/>y controles; atiende reclamos"| SICNA
-    Padre -->|"Consulta controles y<br/>presenta reclamos"| SICNA
-    SICNA -.->|"Integración futura"| MINSA
+    AG -->|"Administra la plataforma<br/>y supervisa las cargas"| SICNA
+    AL -->|"Registra niños, vínculos<br/>y controles; responde reclamos"| SICNA
+    PA -->|"Consulta controles<br/>y presenta reclamos"| SICNA
+    SICNA -->|"Consulta datos por DNI<br/>[HTTPS/JSON]"| RENIEC
+    SICNA -->|"Lee atenciones nuevas<br/>[SQL · solo lectura · programado]"| BDEXT
 
     classDef persona fill:#08427b,color:#fff,stroke:#052e56
     classDef sistema fill:#1168bd,color:#fff,stroke:#0b4884
-    classDef externo fill:#999,color:#fff,stroke:#6b6b6b,stroke-dasharray:5 5
-    class Admin,Staff,Padre persona
+    classDef externo fill:#999,color:#fff,stroke:#6b6b6b
+    class AG,AL,PA persona
     class SICNA sistema
-    class MINSA externo
+    class RENIEC,BDEXT externo
 ```
 
 ---
 
 ## 3. Personas (usuarios)
 
-| Persona | Descripción | Qué hace en el sistema |
+| Persona | Rol | Qué hace en el sistema |
 |---|---|---|
-| **Administrador** | Responsable de la operación de la plataforma | Gestiona usuarios, roles, permisos, micro redes, establecimientos y el catálogo; revisa la auditoría, las sesiones, los dispositivos y las alertas |
-| **Personal de salud** | Coordinador o personal de un establecimiento | Registra niños y padres, los vincula, registra los controles CRED y responde los reclamos |
-| **Padre / apoderado** | Familiar responsable del niño | Usa el portal familiar para ver a sus hijos y sus controles, y presenta reclamos con evidencias |
+| **Administrador general** | `admin` | Gestiona usuarios, roles, permisos, micro redes, establecimientos y el catálogo; revisa la auditoría, las sesiones, los dispositivos y las alertas; ejecuta y revisa la carga de atenciones |
+| **Administrador limitado** | `health_staff` | Coordinador de un establecimiento o micro red. Registra niños y padres (con ayuda de RENIEC), los vincula, registra y corrige controles CRED y responde los reclamos. No administra la plataforma |
+| **Padre / apoderado** | `guardian` | Usa el portal familiar para ver a sus hijos y sus controles, y presenta reclamos con evidencias |
 
 ---
 
@@ -59,18 +61,22 @@ flowchart TB
 | Sistema | Tipo | Responsabilidad | Quién lo construye |
 |---|---|---|---|
 | **SICNA** | Sistema en alcance | Seguimiento de los controles CRED y portal familiar | El equipo del proyecto |
-| **Sistemas del MINSA** | Externo (futuro) | Fuente oficial de información de salud | Ministerio de Salud |
+| **API de RENIEC** | Sistema externo | Devolver nombres, apellidos y fecha de nacimiento de una persona a partir de su DNI | RENIEC |
+| **BD de atenciones de la red de salud** | Sistema externo | Guardar las atenciones que realizan los establecimientos | Red de salud |
 
 ---
 
 ## 5. Relaciones
 
-| Origen | Destino | Descripción |
-|---|---|---|
-| Administrador | SICNA | Administra la plataforma |
-| Personal de salud | SICNA | Registra la atención de los niños |
-| Padre / apoderado | SICNA | Consulta y reclama |
-| SICNA | Sistemas del MINSA | Integración prevista a futuro; hoy no existe |
+| Origen | Destino | Descripción | Protocolo |
+|---|---|---|---|
+| Administrador general | SICNA | Administra la plataforma y supervisa las cargas | — |
+| Administrador limitado | SICNA | Registra la atención de los niños | — |
+| Padre / apoderado | SICNA | Consulta y reclama | — |
+| SICNA | API de RENIEC | Consulta datos de identidad por DNI | HTTPS/JSON |
+| SICNA | BD de atenciones | Lee las atenciones nuevas de forma programada | SQL de solo lectura |
+
+> En el nivel 1 no se indica el protocolo entre personas y sistema: eso se detalla en el nivel 2.
 
 ---
 
@@ -78,6 +84,14 @@ flowchart TB
 
 | # | Decisión o supuesto | Motivo |
 |---|---|---|
-| 1 | En esta versión SICNA no depende de sistemas externos | Simplifica el despliegue y las pruebas; el catálogo SISNAT se carga como datos |
-| 2 | Los padres solo ven información de sus propios hijos | Protección de datos de menores (Ley N.° 29733) |
-| 3 | Una integración futura se haría con un adaptador | Gracias a Clean Architecture, no cambiaría el negocio |
+| 1 | SICNA **solo lee** la base de atenciones; nunca escribe en ella | Es un sistema de la red de salud (RC06) |
+| 2 | Las credenciales de RENIEC están solo en el servidor | No se exponen al navegador (RC05) |
+| 3 | Si un sistema externo falla, SICNA sigue funcionando | Registro manual y reintento de la carga (AC05) |
+| 4 | Los padres solo ven información de sus propios hijos | Protección de datos de menores (Ley N.° 29733) |
+
+### Pendientes por definir
+
+| Tema | Detalle |
+|---|---|
+| Acceso a RENIEC | Confirmar si será directo o mediante un proveedor autorizado, y la cuota de consultas permitida |
+| Estructura de la BD externa | Confirmar con la red de salud las tablas, los códigos de prestación y la frecuencia de la carga |

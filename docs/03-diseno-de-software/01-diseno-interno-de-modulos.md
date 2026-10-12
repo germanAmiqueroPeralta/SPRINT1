@@ -128,7 +128,7 @@ Están en `application/child_control_validate.py`. La base de datos las refuerza
 
 ```mermaid
 sequenceDiagram
-    actor PS as Personal de salud
+    actor PS as Administrador limitado
     participant R as child_control_route
     participant H as create_handler
     participant UC as ChildControlCreateUseCase
@@ -162,7 +162,7 @@ sequenceDiagram
 
 | Paso | Origen → destino | Acción | Capa |
 |---|---|---|---|
-| 1 | Personal de salud → ruta | `POST /api/child-controls` | Presentación |
+| 1 | Administrador limitado → ruta | `POST /api/child-controls` | Presentación |
 | 2 | Ruta | Verifica el permiso `child_control.post` | Presentación |
 | 3 | Handler → caso de uso | Arma la entidad `ChildControl` y llama a `execute()` | Presentación → Aplicación |
 | 4 | Caso de uso → validación | Aplica las reglas RN-01 a RN-07 | Aplicación |
@@ -269,3 +269,128 @@ childControlService = ChildControlService(
 def get_child_control_service() -> ChildControlService:
     return childControlService
 ```
+
+---
+
+## 7. Diseño de los módulos de integración *(diseñado, pendiente de implementación)*
+
+Los dos módulos nuevos siguen **exactamente la misma estructura de 4 capas**. Lo particular es que su infraestructura habla con sistemas externos en lugar de (o además de) PostgreSQL.
+
+### 7.1 Módulo `identity` · consulta de DNI en RENIEC
+
+```text
+identity/
+├── domain/
+│   ├── identity_domain.py            PersonIdentity (dni, nombres, apellidos, fecha de nacimiento)
+│   ├── identity_errors.py            IdentityNotFoundError, IdentityUnavailableError
+│   ├── identity_provider_port.py     IdentityProviderPort (Protocol)
+│   └── identity_cache_port.py        IdentityCachePort (Protocol)
+├── application/
+│   └── identity_lookup_use_case.py   IdentityLookupUseCase: valida el DNI, usa caché y consulta
+├── infrastructure/
+│   ├── reniec_api_adapter.py         ReniecApiAdapter: HTTPS + credenciales + tiempo límite
+│   └── identity_cache.py             Caché de consultas recientes (evita consultas repetidas)
+├── presentation/
+│   └── identity_route.py             GET /api/identity/{dni}  (permiso identity.get)
+└── identity_container.py
+```
+
+```mermaid
+classDiagram
+    direction LR
+    class IdentityLookupUseCase {
+        -provider: IdentityProviderPort
+        -cache: IdentityCachePort
+        +execute(dni) PersonIdentity
+    }
+    class IdentityProviderPort {
+        <<interface>>
+        +find_by_dni(dni) PersonIdentity
+    }
+    class PersonIdentity {
+        <<entity>>
+        +dni: str
+        +first_names: str
+        +last_names: str
+        +birth_date: date
+    }
+    class ReniecApiAdapter {
+        -base_url
+        -token
+        -timeout_s = 5
+        +find_by_dni(dni) PersonIdentity
+    }
+    class FakeIdentityProvider {
+        +find_by_dni(dni) PersonIdentity
+    }
+    IdentityLookupUseCase --> IdentityProviderPort
+    IdentityLookupUseCase ..> PersonIdentity
+    ReniecApiAdapter ..|> IdentityProviderPort
+    FakeIdentityProvider ..|> IdentityProviderPort : pruebas
+```
+
+| Situación | Qué hace el sistema | Respuesta |
+|---|---|---|
+| DNI con formato inválido | El caso de uso lo rechaza sin llamar a RENIEC | 400 |
+| DNI encontrado | Devuelve los datos para autocompletar el formulario | 200 |
+| DNI no existe en RENIEC | `IdentityNotFoundError` | 404 |
+| RENIEC no responde en 5 s | `IdentityUnavailableError`; el formulario se completa manualmente | 503 |
+
+### 7.2 Módulo `attention_sync` · carga de atenciones desde la BD externa
+
+```text
+attention_sync/
+├── domain/
+│   ├── attention_sync_domain.py      ExternalAttention, SyncRun, SyncResult
+│   ├── attention_source_port.py      AttentionSourcePort: leer atenciones desde una fecha
+│   └── attention_sync_ports.py       Puertos hacia child, care_service y child_control
+├── application/
+│   ├── attention_sync_use_case.py    AttentionSyncUseCase: leer → emparejar → aplicar → registrar
+│   └── attention_matcher.py          Reglas para emparejar cada atención con un niño y una prestación
+├── infrastructure/
+│   ├── external_db_attention_source.py  Lee la BD externa (conexión de solo lectura)
+│   ├── attention_sync_repository.py     Guarda cada ejecución en attention_sync_runs
+│   └── attention_sync_adapters.py       Adaptadores hacia child, care_service y child_control
+├── presentation/
+│   └── attention_sync_route.py       POST /api/attention-sync/run · GET /api/attention-sync/runs
+└── attention_sync_container.py
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant J as Importador (programado)
+    participant UC as AttentionSyncUseCase
+    participant SRC as ExternalDbAttentionSource
+    participant EXT as BD externa
+    participant M as AttentionMatcher
+    participant CC as ChildControlPort
+    participant R as SyncRunRepository
+
+    J->>UC: execute(desde = última carga exitosa)
+    UC->>SRC: fetch_since(fecha)
+    SRC->>EXT: SELECT atenciones (solo lectura)
+    EXT-->>SRC: filas
+    SRC-->>UC: lista de ExternalAttention
+    loop por cada atención
+        UC->>M: emparejar(DNI o padrón, código de prestación)
+        alt sin niño o prestación que coincida
+            M-->>UC: omitir + motivo
+        else coincide
+            UC->>CC: marcar control como realizado (fecha, establecimiento)
+            CC-->>UC: aplicado / ya estaba aplicado / regla incumplida
+        end
+    end
+    UC->>R: guardar SyncRun (leídas, aplicadas, omitidas, motivos)
+    UC-->>J: resumen de la carga
+```
+
+| Regla de la carga | Motivo |
+|---|---|
+| Se leen solo las atenciones nuevas desde la última carga exitosa | Evita reprocesar todo cada noche |
+| El niño se identifica por DNI y, si no tiene, por código de padrón | Son los identificadores que comparten ambas bases |
+| La prestación se identifica por su código del catálogo SISNAT | Las dos bases usan el mismo catálogo normativo |
+| Los controles se **actualizan**, no se duplican | La carga es idempotente (restricción `child_controls_unique`) |
+| Cada actualización pasa por las mismas reglas RN-01 a RN-07 | Una atención externa no puede saltarse las reglas del negocio |
+| Las atenciones que no se pueden aplicar se registran con su motivo | El administrador general puede revisarlas y corregirlas |
+| Los cambios del importador quedan en la auditoría con el usuario técnico `importador` | Trazabilidad (AC02) |
